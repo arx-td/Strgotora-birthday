@@ -70,7 +70,7 @@ function pad(n) {
 
 function App() {
   const [phase, setPhase] = useState(() =>
-    Date.now() >= TARGET_DATE.getTime() ? 'reveal' : 'countdown',
+    Date.now() >= TARGET_DATE.getTime() ? 'heart' : 'countdown',
   )
   const [remaining, setRemaining] = useState(() => TARGET_DATE - new Date())
   const notifiedRef = useRef(false)
