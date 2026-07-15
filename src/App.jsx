@@ -60,18 +60,19 @@ function makeHeartBits(count) {
   })
 }
 
-function nextMidnight() {
-  const now = new Date()
-  return new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0)
-}
+// Fixed target — the actual midnight the wish unlocks at. Once this
+// passes, the site stays unlocked forever on every future visit.
+const TARGET_DATE = new Date(2026, 6, 16, 0, 0, 0, 0)
 
 function pad(n) {
   return String(n).padStart(2, '0')
 }
 
 function App() {
-  const [phase, setPhase] = useState('countdown') // countdown -> heart -> reveal
-  const [remaining, setRemaining] = useState(() => nextMidnight() - new Date())
+  const [phase, setPhase] = useState(() =>
+    Date.now() >= TARGET_DATE.getTime() ? 'reveal' : 'countdown',
+  )
+  const [remaining, setRemaining] = useState(() => TARGET_DATE - new Date())
   const notifiedRef = useRef(false)
   const secretTapsRef = useRef(0)
   const secretTimerRef = useRef(null)
@@ -88,9 +89,8 @@ function App() {
 
   useEffect(() => {
     if (phase !== 'countdown') return
-    const target = nextMidnight()
     const tick = () => {
-      const diff = target - new Date()
+      const diff = TARGET_DATE - new Date()
       if (diff <= 0) {
         setRemaining(0)
         setPhase('heart')
