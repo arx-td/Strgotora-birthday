@@ -86,6 +86,8 @@ function App() {
   const [phase, setPhase] = useState('countdown') // countdown -> heart -> reveal
   const [remaining, setRemaining] = useState(() => nextMidnight() - new Date())
   const notifiedRef = useRef(false)
+  const secretTapsRef = useRef(0)
+  const secretTimerRef = useRef(null)
 
   const balloons = useMemo(() => makeBalloons(14), [])
   const particles = useMemo(() => makeParticles(40), [])
@@ -127,6 +129,19 @@ function App() {
       notifyWishViewed()
     }
   }, [phase])
+
+  function handleSecretTap() {
+    secretTapsRef.current += 1
+    if (secretTimerRef.current) clearTimeout(secretTimerRef.current)
+    if (secretTapsRef.current >= 5) {
+      secretTapsRef.current = 0
+      setPhase('heart')
+      return
+    }
+    secretTimerRef.current = setTimeout(() => {
+      secretTapsRef.current = 0
+    }, 1200)
+  }
 
   const totalSeconds = Math.max(0, Math.floor(remaining / 1000))
   const hours = Math.floor(totalSeconds / 3600)
@@ -203,7 +218,7 @@ function App() {
             <p className="invite-sub">Unlocks automatically at midnight 🌙</p>
 
             <div className="countdown">
-              <div className="time-box">
+              <div className="time-box" onClick={handleSecretTap}>
                 <span className="time-num">{pad(hours)}</span>
                 <span className="time-label">Hours</span>
               </div>
@@ -218,10 +233,6 @@ function App() {
                 <span className="time-label">Seconds</span>
               </div>
             </div>
-
-            <button className="skip-link" onClick={() => setPhase('heart')}>
-              already midnight? tap here
-            </button>
           </div>
         ) : phase === 'heart' ? (
           <div className="heart-stage" aria-hidden="true">
