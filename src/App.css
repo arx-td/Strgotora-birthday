@@ -59,36 +59,6 @@
   }
 }
 
-/* golden particles */
-.particles {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  background: radial-gradient(circle, #fff4d6 0%, #ffd889 45%, transparent 75%);
-  box-shadow: 0 0 6px 1px rgba(255, 210, 130, 0.65);
-  animation-name: twinkle;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateY(0) scale(0.6);
-  }
-  50% {
-    opacity: 1;
-    transform: translateY(var(--drift)) scale(1);
-  }
-}
-
 /* balloons */
 .balloons {
   position: fixed;
@@ -151,22 +121,20 @@
 .confetti-piece {
   position: absolute;
   top: -5%;
+  line-height: 1;
+  opacity: 0;
   animation-name: fall;
   animation-timing-function: ease-in;
   animation-iteration-count: infinite;
 }
 
-.confetti-piece.round {
-  border-radius: 50%;
-}
-
 @keyframes fall {
   0% {
     transform: translateY(0) rotate(0deg);
-    opacity: 1;
+    opacity: 0.35;
   }
   85% {
-    opacity: 1;
+    opacity: 0.3;
   }
   100% {
     transform: translateY(105vh) rotate(340deg);

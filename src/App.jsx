@@ -12,8 +12,6 @@ const BALLOON_COLORS = [
   '#e3cdd2',
 ]
 
-const CONFETTI_COLORS = ['#f2f2f5', '#d1d1d6', '#aeaeb4', '#8e8e93', '#e3cdd2', '#cfc9dc']
-
 function random(min, max) {
   return Math.random() * (max - min) + min
 }
@@ -30,28 +28,17 @@ function makeBalloons(count) {
   }))
 }
 
-function makeParticles(count) {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    left: random(0, 100),
-    top: random(0, 100),
-    size: random(2, 5),
-    duration: random(2.5, 6),
-    delay: random(0, 5),
-    drift: random(10, 26) * (Math.random() > 0.5 ? 1 : -1),
-  }))
-}
+const CONFETTI_HEARTS = ['❤️', '💕', '💗']
 
 function makeConfetti(count) {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
     left: random(0, 100),
-    size: random(6, 12),
+    size: random(10, 18),
     duration: random(3.2, 6),
     delay: random(0, 1.2),
     rotate: random(0, 360),
-    color: CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)],
-    round: Math.random() > 0.5,
+    emoji: CONFETTI_HEARTS[Math.floor(Math.random() * CONFETTI_HEARTS.length)],
   }))
 }
 
@@ -90,7 +77,6 @@ function App() {
   const secretTimerRef = useRef(null)
 
   const balloons = useMemo(() => makeBalloons(14), [])
-  const particles = useMemo(() => makeParticles(40), [])
   const heartBits = useMemo(
     () => (phase === 'heart' ? makeHeartBits(16) : []),
     [phase],
@@ -154,24 +140,6 @@ function App() {
       <div className="orb orb-b" />
       <div className="orb orb-c" />
 
-      <div className="particles" aria-hidden="true">
-        {particles.map((p) => (
-          <span
-            key={p.id}
-            className="particle"
-            style={{
-              left: `${p.left}%`,
-              top: `${p.top}%`,
-              width: p.size,
-              height: p.size,
-              animationDuration: `${p.duration}s`,
-              animationDelay: `${p.delay}s`,
-              '--drift': `${p.drift}px`,
-            }}
-          />
-        ))}
-      </div>
-
       <div className="balloons" aria-hidden="true">
         {balloons.map((b) => (
           <span
@@ -195,17 +163,17 @@ function App() {
           {confetti.map((c) => (
             <span
               key={c.id}
-              className={`confetti-piece ${c.round ? 'round' : ''}`}
+              className="confetti-piece"
               style={{
                 left: `${c.left}%`,
-                width: c.size,
-                height: c.size,
-                background: c.color,
+                fontSize: c.size,
                 animationDuration: `${c.duration}s`,
                 animationDelay: `${c.delay}s`,
                 transform: `rotate(${c.rotate}deg)`,
               }}
-            />
+            >
+              {c.emoji}
+            </span>
           ))}
         </div>
       )}
